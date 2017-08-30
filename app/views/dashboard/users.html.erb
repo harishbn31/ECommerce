@@ -1,0 +1,30 @@
+<h1>Dashboard users</h1>
+<%= render 'nav' %>
+<h3>Income of user</h3>
+<% data_income ={} %>
+<% @users.each do |user| %>
+
+
+
+<% data_income[user.email] = Order.where('user_id = ?',user.id).length%>
+
+
+<%end%>
+<%= pie_chart(data_income) %>
+<%= bar_chart(data_income) %>
+
+
+<h3> Orders Total by the User</h3>
+<% data_total = {} %>
+<% @users.each do |user| %>
+
+<% data_total[user.email] =  Order.where('user_id= ?',user.id).pluck(:total).sum(:total) %>
+
+<%end%>
+<%= column_chart(data_total) %>
+<%= bar_chart(data_total) %>
+
+
+
+
+

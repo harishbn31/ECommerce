@@ -1,0 +1,73 @@
+<h2><%= @product.name %></h2>
+<p>code - <%= @product.code %></p>
+<p> Price - <%= @product.price %> </p>
+<p>	description - <%= @product.description %> </p>
+<p> category - <%= link_to @product.category.name, category_path %>
+	</p>
+<p>stock - <%= @product.stock %></p>
+
+
+<%= form_for @cart_line_item do |f| %>
+<%= f.label :quantity %>
+<%= f.select :quantity, (1..10).to_a%> <br/>
+<%= f.hidden_field :product_id, value: @product.id %>
+<%= f.submit "Add to cart"%>
+<%end%>
+
+<%= form_for @wishlist do |f| %>
+<%= f.hidden_field :product_id, value: @product.id %>
+<%= f.submit "save for later" %>
+<%end%>
+
+<%if user_signed_in?%>
+
+<%= form_for @review do |f| %>
+
+<p><%= f.label :body %> </br>
+<%= f.text_area :body %> 
+</p>
+<%= f.label :rating %>
+<%= f.select :rating, (1..5).to_a%>
+<%= f.hidden_field :product_id, value: @product.id %>
+<%= f.hidden_field :user_id, value: @review.user_id%>  
+<%= f.submit "Add review" %>
+<%end %>
+<%else%>
+
+<h4> <%= link_to "User Should Login Add Review", new_user_session_path%> </h4>
+<%end%>
+
+
+<h2><font color="green">Reviews</font></h2>
+
+<%if @product.reviews.empty?%>
+<p> No reviews found </p>
+<%else%>
+
+<% @product.reviews.each do |review| %>
+<table> 
+<td><%= review.user_id %></td>
+<td><%= review.product_id%></td>
+<td><%= review.body %></td> 
+<td><%= review.rating%></td>
+</table> 
+<% if (current_user.id == review.user_id) || current_user.is_admin %>
+
+<%= link_to "Edit", edit_review_path(review.id) %>
+<%= link_to "Delete", review_path(review.id), method: :delete, data: {confirm: "Are you Sure?"} %> 
+<%end%>
+
+<% end %>
+<%end%>
+
+
+<%= link_to "List Products", products_path %>
+
+<% if user_signed_in? && current_user.is_admin %>
+<%= link_to "edit", edit_product_path(@product.id) %>
+
+<%= link_to "destroy", product_path(@product.id), method: :delete, data: {confirm: "Are you sure?"} %>
+<%end%>
+
+
+<!-- (@product.category_id) = 1 -->

@@ -1,0 +1,26 @@
+<h2>Dashboard Categories</h2>
+<%= render 'nav' %>
+<% data = {}%>
+<h3> Distrubution of products across the category</h3>
+<% @categories.each do |category| %>
+<% data[category.name] = category.products.length %>
+<%end%>
+
+<%= pie_chart(data) %>
+<%= column_chart(data) %>
+<%= bar_chart(data) %>
+<%= line_chart(data) %>
+<h3> sales of products by categories</h3>
+<% data_sales = {} %>
+<% @categories.each do |category| %>
+<% data_sales[category.name] = OrderLineItem.joins(:product).where('products.category_id = ?',category.id).length%>
+<%end%>
+<%= column_chart(data_sales) %>
+<h3> Total sale Amount across categories</h3>
+<% data_amount = {} %>
+<% @categories.each do |category| %>
+<% data_amount[category.name] = OrderLineItem.joins(:product).where('products.category_id = ?',category.id).sum(:total) %>
+<%end%>
+<%= pie_chart(data_amount) %>
+
+

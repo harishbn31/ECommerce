@@ -1,0 +1,19 @@
+<h2>Edit category</h2>
+
+<%= form_for @category do |c| %>
+
+	<% if @category.errors.any? %>
+	<h3> The Errors </h3>
+	<ul>
+		<% @category.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+		<% end %>
+	</ul>
+	<% end %>
+
+	<label>Name :</label><br/>
+	<%= c.text_field :name, placeholder: "Enter the category name", autofocus: true %>
+
+	<%= c.submit %> or <%= link_to "back", categories_path %>
+
+<% end %>

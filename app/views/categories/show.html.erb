@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @category.name %>
+</p>
+  <h2>Listing products (<%= @category.products.length %>)</h2>
+  <ul>
+  	<% @category.products.each do |product| %>
+  		<li><%= link_to product.name, product_path(product.id)%> of INR <%= product.price %>
+
+  		</li>
+  		<% end %>
+  </ul>
+
+
+<%= link_to 'Edit', edit_category_path(@category) %> |
+<%= link_to 'Back', categories_path %>

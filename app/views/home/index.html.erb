@@ -1,0 +1,55 @@
+<h1>Home#index</h1>
+<!--
+<%= %> is embedded ruby tag inside that html used for presentation
+<% %> is embedded ruby tag inside html used for evaluation
+-->
+2 + 2 : <%= 2 + 2 %> <!-- commenting -->
+<% names = ["hari", "ganesh", "veeresh", "ramesh"]%>
+
+<ul> <!-- unordered list with bullets-->
+<li> Virat </li>
+<li> Roshit </li>
+<li> Dhoni</li>
+</ul>
+
+<ol> <!-- ordered list with numbers -->
+<li> Apple</li>
+<li> Samsung</li>
+<li> Mi</li>
+</ol>
+ <h3>Listing Names</h3>
+ <ol>
+ 	<% names.each do |name| %>
+ 	<li> <%= name.capitalize %></li>
+ 	<% end %>
+ </ol>
+
+ <%companies = [] %>
+ <% if companies.empty? %>
+ <p> <h1>Companies not Found</h1></p>
+ <% else %>
+ <h3>Listing Companies</h3>
+ <ol>
+ 	<% companies.each do |company| %>
+ 	<li><%=company %></li>
+ 	<%end%>
+ </ol>
+ <%end%>
+
+ <a href="about"> About</a>
+ <%= link_to "About (ror)", home_about_path %>\
+  <%= link_to "contact", home_contact_path %>
+
+ <h2>Listing Categories</h2>
+<ol>
+	<% @categories.each do |category| %>
+		<li><%= category.name %></li>
+	<%end%>
+</ol>
+
+<h2> Listing Products</h2>
+<ol>
+	<% @products.each do |product| %>
+	<li><%= product.name %></li>
+	<%end%>
+</ol>

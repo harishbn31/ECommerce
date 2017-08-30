@@ -1,0 +1,19 @@
+<h2><font color="blue"> Listing Products</font></h2>
+<% if @products.empty? %>
+	<p>No products found</p>
+<% else %>
+	<ul>
+	<% @products.each do |product| %>
+		<li><%= link_to product.name, product_path(product.id) %> - INR <%= product.price %>
+			<%= link_to product.category.name, category_path(product.category_id) %>
+			
+			<!-- <%= link_to "show", product_path(product.id) %> -->
+		</li>
+	<% end %>
+	</ul>
+<% end %>
+
+<% if user_signed_in? && current_user.is_admin%>
+<h2><%= link_to "Add Product", new_product_path %></h2>
+<%end%>
+

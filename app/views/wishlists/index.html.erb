@@ -1,0 +1,31 @@
+<h2> Your Wish Lists</h2>
+
+<table border = '1'>
+	<thead>
+		<th> Sl No</th>
+		<th> Product Name </th>
+		<th> Move to cart</th>
+		<th> remove </th>
+	</thead>
+<tbody>
+
+<% @wishlists.each_with_index do |wishlist,index| %>
+<tr>
+	<td> <%= index+1 %></td>
+	<td><%= wishlist.product.name %></td>
+	<td> <%= form_for @cart_line_item do |f| %>
+	<%= f.hidden_field :quantity, value: 1 %>
+<%= f.hidden_field :product_id, value: wishlist.product_id%>
+<%= f.submit "Move to Cart" %>
+<%end%></td>
+	
+	<td><%= link_to "Remove", wishlist_path(wishlist.id), method: :delete, data: {confirm: "Are you Sure?"} %></td>
+</tr>
+	<%end%>
+
+</tbody>
+</table>
+
+
+	
+	

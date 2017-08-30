@@ -1,0 +1,16 @@
+<p> Hi <%= @order.user.username %>, <br/>
+Your order has been confirmed </p>
+
+<h4>
+			<p><%= @order.address %></p>
+			
+			<%=@order.order_number %>
+			<%=@order.order_date %>
+			<%=@order.total %> </h4>
+			<ul>
+		<% @order.order_line_items.each do |line_item| %>
+		<li><%= line_item.product.name%> INR <%= line_item.price%> <%= line_item.quantity %> <%=line_item.total%> </li>
+		<%end%>
+	</ul>
+
+	<b> Thank you for placing an order with us</b>

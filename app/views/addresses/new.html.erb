@@ -1,0 +1,16 @@
+<h2> Add new address </h2>
+
+<%= form_for @address do |f| %>
+<label>Address : </label><br/>
+
+<label>Street :</label><br/>
+<%= f.text_field :street %><br/>
+<label>PIN: </label><br/>
+<%= f.number_field :pin %><br/>
+<label>City</label><br/>
+<%= f.text_field :city %><br/>
+<label>LandMark</label><br/>
+<%= f.text_field :landmark %><br/>
+<%= f.submit "Add Address" %><br/>
+
+<%end%>
