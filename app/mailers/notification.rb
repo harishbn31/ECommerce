@@ -7,7 +7,7 @@ class Notification < ApplicationMailer
 
 def review_confirmation (review)
 	@user =User.find_by(is_admin: true)
-	binding.pry
+	# binding.pry
   	@review = review
     # mail to: "#{@review.user.email}", subject: "Thanks for Review add - #{@review.user.username}"
     mail to: "#{@user.email}", subject: "Review added by #{@review.user.username} to the product #{@review.product.name}"

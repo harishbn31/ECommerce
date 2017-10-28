@@ -1,0 +1,10 @@
+ <% if @vendor.errors.any? %>
+  $('errors').show();
+  $('#errors').html("<%= escape_javascript render 'errors' %>");
+  <%else%>
+  $('#vendorTable').html("<%= escape_javascript render 'table' %>");
+  $('#notice').text("Vendor was created")
+  $('#new_vendor')[0].reset();
+  $('#count').text('<%= Vendor.all.count %>');
+  $('#errors').hide();
+<% end %>

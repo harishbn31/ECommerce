@@ -14,11 +14,18 @@ def index
 	def create 
 		@review = Review.new(params[:review].permit(:user_id, :product_id, :body, :rating))
 		@review.user_id = current_user.id
-		if @review.save
-
-		Notification.review_confirmation(@review).deliver!
-			redirect_to :back, notice: "Successfully created the Review"
-	
+		# Notification.review_confirmation(@review).deliver!
+			# redirect_to :back, notice: "Successfully created the Review"
+		 respond_to do |format|
+      if @review.save
+        format.html { redirect_to @review, notice: 'review was successfully created.' }
+        format.json { render :show, status: :created, location: @review }
+        format.js 
+      else
+        format.html { render :new }
+        format.json { render json: @review.errors, status: :unprocessable_entity }
+        format.js
+      end
 		end
 	end
 
@@ -42,6 +49,10 @@ def index
 	def destroy
 		@review = Review.find(params[:id])
 		@review.destroy
-		redirect_to :back, notice: "Successfully destroyed the Review"
+		respond_to do |format|
+        format.js
+      	end
+
+		# redirect_to :back, notice: "Successfully destroyed the Review"
 	end
 end

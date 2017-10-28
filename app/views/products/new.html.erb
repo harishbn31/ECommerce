@@ -10,6 +10,13 @@
 			<% end %>
 		</ul>
 	<% end %>
+	<label>Category : </label><br/>
+	<%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select Category" %>
+	<span id="productCount"></span><br/>
+
+	<label>Sub Category : </label><br/>
+	<%= f.collection_select :sub_category_id, [], :id, :name, prompt: "Select Sub Category" %>
+	<span id="productCount"></span><br/>
 
 	<label>code : </label><br/>
 	<%= f.text_field :code, autofocus: true %><br/>
@@ -21,28 +28,64 @@
 	<%= f.text_area :description %><br/>
 
 	<label>Price : </label><br/>
-	<%= f.number_field :price, min: 1, step: 'any' %><br/>
-
-	<label>Category : </label><br/>
-	<%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Select Category" %><br/>
-	<label>Stock : </label><br/>
-	<%= f.number_field :stock, min: 0 %><br/>
+	<%= f.number_field :price, min: 49, step: 'any' %><br/>
 
 	
-
+	<label>Stock : </label><br/>
+	<%= f.number_field :stock, min: 0 %><br/>
 	<%= f.submit %> or <%= link_to "back", products_path %>
 <% end %>
 
 <script>
-var nameHandle = document.getElementById('product_name');
-var nameErrorHandle = document.getElementById('nameError');
+var categoryHandle = document.getElementById('product_category_id');
+var subCategoryHandle = document.getElementById('product_sub_category_id');
 
-nameHandle.onblur = function(){
-	if (nameHandle.value == ""){
-		nameErrorHandle.innerHTML = "can't be blank";
-	} else {
-		nameErrorHandle.innerHTML = "";
+
+categoryHandle.addEventListener('change',function(){
+	subCategoryHandle.innerHTML = "";
+	if(categoryHandle.value != ""){
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', '/ajax_calls/find_sub_categories?category_id=' + categoryHandle.value, true)
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4 && xhr.status === 200){
+				var subCategories = JSON.parse(xhr.responseText);
+				subCategories.forEach(function(subCategory){
+					var newElement = document.createElement('option');
+					var newText = document.createTextNode(subCategory.name);
+					newElement.appendChild(newText);
+					newElement.setAttribute("value", subCategory.id);
+					subCategoryHandle.appendChild(newElement);
+				});
+			}
+		}
+		xhr.send();	
 	}
 
-}
+},false);
+	// 	xhr.open('GET', '/ajax_calls/category_products?category_id=' + categoryHandle.value, true);
+	// 	xhr.onreadystatechange = function(){
+	// 		if(xhr.readyState === 4 && xhr.status === 200){
+	// 			var result = JSON.parse(xhr.responseText);
+	// 			// document.getElementById('productCount').innerHTML = "There are "+ result["count"] + " products are there in DB belongs to "+ categoryHandle.options[categoryHandle.selectedIndex].innerHTML;
+	// 			document.getElementById('productCount').innerHTML = "There are "+ result["count"] + " products are there in DB belongs to "+ result["category"]
+	// 		}
+	// 	}
+	// 	xhr.send();
+	// }else{
+	// 	document.getElementById('productCount').innerHTML = ""
+	// }
+// },false)
+// var nameHandle = document.getElementById('product_name');
+// var nameErrorHandle = document.getElementById('nameError');
+
+// nameHandle.onblur = function(){
+// 	if (nameHandle.value == ""){
+// 		nameErrorHandle.innerHTML = "can't be blank";
+// 	} else {
+// 		nameErrorHandle.innerHTML = "";
+// 	}
+
+// }
+
+
 </script>

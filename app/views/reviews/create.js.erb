@@ -1,0 +1,8 @@
+<%if @review.errors.any? %>
+	$('#errorMsg').show();
+	$('#errorMsg').html("<%= escape_javascript render 'errors'%>");
+<%else%>
+	$('#errorMsg').hide();
+	$('#new_review')[0].reset();
+	$('#reviewList').append("<%= escape_javascript render 'review'%>")
+<%end%>

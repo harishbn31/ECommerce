@@ -1,19 +1,97 @@
 <h2><font color="blue"> Listing Products</font></h2>
-<% if @products.empty? %>
-	<p>No products found</p>
-<% else %>
-	<ul>
-	<% @products.each do |product| %>
-		<li><%= link_to product.name, product_path(product.id) %> - INR <%= product.price %>
-			<%= link_to product.category.name, category_path(product.category_id) %>
-			
-			<!-- <%= link_to "show", product_path(product.id) %> -->
-		</li>
-	<% end %>
-	</ul>
-<% end %>
+
+
+		<h3>Select Category</h3>
+			<%Category.all.each do |category|%>
+		<input type="checkbox" id="<%=category.id%>" name="<%= category.name%>" onclick="get_all(<%=category.id%>);"><%= category.name%></input>
+		<%end%><button onclick="reset();">Reset</button><br/>
+
+<div id = 'slidecontainer'>
+        <output id="slider1">0:</output>
+        <input id = "x" type="range" name="price-min"  min="100" max="500" onchange= 'slider1.value=value' >
+        <output id="500">500</output>
+        <input id = "y" type="range" name="price-max" min="500" max="1000" onchange = 'slider2.value = value'>
+        <output id="slider2">1000</output>
+        <!-- <input id= "button" type="submit" data-inline="true" value="Submit"> -->
+</div>
+  
+<div>
+	<%= render 'table' %>
+</div>
+<script>
+		// var priceHandle = document.querySelectorAll('input[checkbox]');
+		var minHandle = document.getElementById('slider1');
+		var maxHandle = document.getElementById('slider2');
+		var divHandle = document.getElementById('slidecontainer')
+		var checkHandle = document.querySelectorAll('input[checkbox]');
+		var tableHandle = document.getElementById('table1');
+		var bodyHandle = document.getElementById('tbody')
+		var count = 1;
+		var min = 100, max = 1000;
+	window.addEventListener('load',function(){
+		get_all_products(); 
+	},false);
+
+	divHandle.addEventListener('change',function(){
+		// console.log("dfghj")
+		min = minHandle.value
+		max = maxHandle.value
+		get_all_products(min,max);
+	},false);
+
+
+	function reset(){
+		get_all_products();
+	}
+
+	function get_all(cat_id){
+
+		 if(document.getElementById(cat_id).checked === true){
+		 		get_all_products(cat_id);
+		 	bodyHandle.innerHTML = "";
+		}else if (document.getElementById(cat_id).checked === false){
+
+			for(var i=0; i < tableHandle.rows.length ; i++){
+				if (tableHandle.rows[i].className === "c_"+cat_id){
+					tableHandle.deleteRow(i);
+						i --;
+				}
+			};
+		}
+	}
+		
+		function get_all_products(ids,min,max){
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', 'http://localhost:3000/products?category_ids='+ids+'&min='+min+'&max='+max, true)
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4 && xhr.status === 200){
+				var row_count = 0;
+				var products = JSON.parse(xhr.responseText);
+				// console.log(products)
+				// bodyHandle.innerHTML = "";
+				products.forEach(function(product){
+					
+					var row = tableHandle.insertRow(-1);
+					row.setAttribute("class", "c_" + product.category_id);
+					var cell0 = row.insertCell(0)
+					var cell1 = row.insertCell(1);
+					var cell2 = row.insertCell(2);
+					var cell3 = row.insertCell(3);
+					cell0.innerHTML = product["name"];
+					cell1.innerHTML = product["price"];
+					cell2.innerHTML = product["description"];
+					cell3.innerHTML = product["category_name"];
+				});
+			 }
+			}
+
+		xhr.send();
+
+		}	
+
+</script>
+
 
 <% if user_signed_in? && current_user.is_admin%>
 <h2><%= link_to "Add Product", new_product_path %></h2>
 <%end%>
-

@@ -1,0 +1,27 @@
+<h1>Listing Vendors (<%= @vendors.count%>)</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr id = "tr_<%= vendor.id %>">
+        <td><%= vendor.name %></td>
+        <td><%= vendor.email %></td>
+        <td><%= vendor.mobile %></td>
+        <td><%= link_to 'Show', vendor %></td>
+        <td><%= link_to 'Edit', edit_vendor_path(vendor), remote: true %></td>
+        <td><%= link_to 'Destroy', vendor, method: :delete, data: { confirm: 'Are you sure?', remote: true } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

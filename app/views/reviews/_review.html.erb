@@ -1,0 +1,6 @@
+<li id= "r_<%= @review.id%>">
+	<%= @review.body %>
+		<% if @review.user_id == current_user.id%>
+		<%= link_to "destroy", review_path(@review.id),method: :delete, data: {confirm: "Are you sure", remote: true} %>
+		<%end%>
+</li>

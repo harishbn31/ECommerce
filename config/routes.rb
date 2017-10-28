@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :vendors
+  get 'ajax_calls/check_email_taken'
+  get 'ajax_calls/category_products'
+  get 'ajax_calls/find_sub_categories'
   get 'dashboard/home'
 
   get 'dashboard/categories'

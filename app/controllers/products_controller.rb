@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-	
+	skip_before_action :verify_authenticity_token
 before_action :authenticate_user!, except: [:index,:show]
 before_action :check_is_admin, except: [:index,:show]
 =begin 
@@ -49,8 +49,26 @@ before_action :check_is_admin, except: [:index,:show]
 =end
 
 	def index
-		@products = Product.all
-
+	if params[:category_ids]
+		# binding.pry
+		if params[:min] != "undefined" && params[:max] != "undefined"
+      	@products = Product.where('category_id = ? AND price > ? AND price < ?',params[:category_ids].split(","),params[:min], params[:max],)
+      	render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+      	else
+      		@products = Product.where('category_id = ?',params[:category_ids].split(","))
+      	end
+  #     	elsif params[:category_ids].nil?
+  #     		# binding.pry
+  #     	@products = Product.all
+		# render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+	elsif params[:min] && params[:max] && params[:category_id] != "" 
+		# binding.pry
+		@products = Product.where('price > ? AND price < ?',params[:min], params[:max])
+		# binding.pry
+		render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+      	else
+      		@products = Product.all
+      	end
 	end
 
 	def new

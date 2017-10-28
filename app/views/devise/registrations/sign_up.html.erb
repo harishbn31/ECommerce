@@ -1,0 +1,81 @@
+<div class="field">
+    <%= f.label :username %><br />
+    <%= f.text_field :username %>
+    <span id = "usernameError"></span>
+  </div>
+   <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email%>
+    <span id = "emailError"></span>
+  </div>
+ <div class="field">
+    <%= f.label :mobile %><br />
+    <%= f.text_field :mobile %>
+    <span id = "mobileError"></span>
+  </div>
+<script>
+    var alphabetFormatter = /[A-Za-z]/;
+    var emailFormatter = /\S+@\S+\.\S+/;
+    var mobileFormatter =  /^[0-9]+$/;
+      var signHandle = document.getElementByClassName('actions');
+    var validator = {
+      name: false,
+      email: false,
+      mobile: false
+    };
+     var usernameHandle = document.getElementById('user_username');
+    var emailHandle = document.getElementById('user_email');
+    var mobileHandle = document.getElementById('user_mobile');
+
+    var usernameErrorHandle = document.getElementById('usernameError');
+    var emailErrorHandle = document.getElementById('emailError');
+    var mobileErrorHandle = document.getElementById('mobileError');
+
+    function resetErrorMsg(errorField){
+        errorField.innerHTML ="";
+      }
+
+
+    usernameHandle.addEventListener('blur',function(){
+      if(usernameHandle.value === ""){
+        usernameErrorHandle.innerHTML = "Can't be blank";
+      } else if(!alphabetFormatter.test(usernameHandle.value)){
+        usernameHandle.innerHTML = "Should be only alphabets";
+      } else if( usernameHandle.value.length < 3){
+        usernameErrorHandle.innerHTML = "Should contain minimum 6 characters"
+      }else {
+        resetErrorMsg(usernameErrorHandle);
+        determineGender(usernameHandle.value);
+      }
+    },false);
+
+    emailHandle.addEventListener('blur', function(){
+      if(emailHandle.value == ""){
+        emailErrorHandle.innerHTML = "Can't be blank";
+      }else if(!emailFormatter.test(emailHandle.value)){
+        emailErrorHandle.innerHTML = "Should be valid format";
+      }else if(check_email_taken(emailHandle.value)){
+        emailErrorHandle.innerHTML = "email already taken"
+      }else{
+        resetErrorMsg(emailErrorHandle);
+      }
+    },false);
+
+    mobileHandle.addEventListener('blur', function(){
+      if(mobileHandle.value == ""){
+        mobileErrorHandle.innerHTML = "Can't be blank";
+      }else if(!mobileFormatter.test(mobileHandle.value)){
+        mobileErrorHandle.innerHTML = "Should be valid format";
+      }else if(mobileHandle.value.length !== 10){
+        mobileErrorHandle.innerHTML = "Should be 10 digits"
+      } else{
+        resetErrorMsg(mobileErrorHandle);
+      }
+    },false);
+    </script>
+
+
+  <div class="actions">
+    <%= f.submit "Sign up" %>
+  </div>
+<% end %>
